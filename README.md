@@ -66,57 +66,58 @@
 
 9. 接下来你可以把这个项目部署到你的服务器上
 
-10. 使用 axios 在 Koa 上对 API 进行代理，并且对数据进行缓存
 
-    ```Javascript
-    // 由于接口调用数量有限制，所以使用缓存
-    const blogListCache = {
-      time: +new Date(),
-      isValid: false,
-      data: []
-    }
-    // 缓存时间(单位为毫秒)
-    const CACHE_TIME = 30000
-    
-    // 代理获取博客列表信息
-    blogApiRouter.get('/bloglist', async ctx => {
-      const now = +new Date()
-    
-      // 可以使用缓存的资源
-      if (
-        now - blogListCache.time <= CACHE_TIME &&
-        blogListCache.isValid === true
-      ) {
-        return (ctx.body = { data: blogListCache.data })
+
+### 如何使用 axios 在 Koa 上对 API 进行代理，并且对数据进行缓存
+
+```Javascript
+// 由于接口调用数量有限制，所以使用缓存
+const blogListCache = {
+  time: +new Date(),
+  isValid: false,
+  data: []
+}
+// 缓存时间(单位为毫秒)
+const CACHE_TIME = 30000
+
+// 代理获取博客列表信息
+blogApiRouter.get('/bloglist', async ctx => {
+  const now = +new Date()
+
+  // 可以使用缓存的资源
+  if (
+    now - blogListCache.time <= CACHE_TIME &&
+    blogListCache.isValid === true
+  ) {
+    return (ctx.body = { data: blogListCache.data })
+  }
+
+  await axios
+    .get(
+      `https://yuque.com/api/v2/repos/${YUQUE_USER_NAME}/${YUQUE_KNOWLEDGE_LIB}/toc`,
+      {
+        headers: {
+          'User-Agent': 'personalBlog',
+          'X-Auth-Token': TOKEN
+        }
       }
-    
-      await axios
-        .get(
-          `https://yuque.com/api/v2/repos/${YUQUE_USER_NAME}/${YUQUE_KNOWLEDGE_LIB}/toc`,
-          {
-            headers: {
-              'User-Agent': 'personalBlog',
-              'X-Auth-Token': TOKEN
-            }
-          }
-        )
-        .then(response => {
-          // 设置缓存信息
-          blogListCache.time = +new Date()
-          blogListCache.isValid = true
-          blogListCache.data = response.data.data
-    
-          ctx.body = response.data
-        })
-        .catch(error => {
-          console.log(error.message)
-    
-          ctx.response.status = 404
-          ctx.response.body = {
-            status: 'fail'
-          }
-        })
-    })
-    ```
+    )
+    .then(response => {
+      // 设置缓存信息
+      blogListCache.time = +new Date()
+      blogListCache.isValid = true
+      blogListCache.data = response.data.data
 
-    
+      ctx.body = response.data
+    })
+    .catch(error => {
+      console.log(error.message)
+
+      ctx.response.status = 404
+      ctx.response.body = {
+        status: 'fail'
+      }
+    })
+})
+```
+
