@@ -2,8 +2,6 @@
 
 使用 React 和 Koa 实现了一个博客系统，该项目依赖于 [语雀](https://yuque.com/) 提供的接口来实现。
 
-演示地址: [http://guozeling.cn/](http://guozeling.cn/)
-
 语雀开发者文档: [https://yuque.com/yuque/developer](https://yuque.com/yuque/developer)
 
 
