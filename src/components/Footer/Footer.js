@@ -10,9 +10,15 @@ const Footer = () => (
       </Styled.IconLink>
     </Styled.SocialList>
     <Styled.WebsiteDescription>
-      © {new Date().getFullYear()} Powered by&nbsp;&nbsp;
-      <Styled.Link href={'https://github.com/zaleGZL/yq-blog'} target="_blank">
+      Powered by&nbsp;&nbsp;
+      <Styled.Link href="https://github.com/zaleGZL/yq-blog" target="_blank">
         yq-blog
+      </Styled.Link>
+    </Styled.WebsiteDescription>
+    <Styled.WebsiteDescription>
+      个人版权所有©&nbsp;&nbsp;
+      <Styled.Link href="http://www.miitbeian.gov.cn" target="_blank">
+        粤ICP备17095165号
       </Styled.Link>
     </Styled.WebsiteDescription>
   </Styled.Footer>
